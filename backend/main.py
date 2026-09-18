@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import engine, get_db
 import models, schemas, auth
@@ -7,6 +8,15 @@ import models, schemas, auth
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="PMPML Booking API", version="1.0")
+
+# Enable CORS for React frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
@@ -28,6 +38,7 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     
     return {"message": "User registered successfully", "user_id": new_user.id, "email": new_user.email}
+
 # 2. User Login Endpoint
 @app.post("/api/auth/login", response_model=schemas.Token)
 def login_user(user: schemas.UserLogin, db: Session = Depends(get_db)):
