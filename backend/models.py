@@ -40,3 +40,11 @@ class Booking(Base):
 
     user = relationship("User", back_populates="bookings")
     route = relationship("BusRoute", back_populates="bookings")
+
+class BusStop(Base):
+    __tablename__ = "bus_stops"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    stop_name = Column(String(255), unique=True, index=True)
+    latitude = Column(Float)
+    longitude = Column(Float)    
