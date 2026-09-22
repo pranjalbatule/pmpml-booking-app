@@ -47,4 +47,23 @@ class BusStop(Base):
     id = Column(Integer, primary_key=True, index=True)
     stop_name = Column(String(255), unique=True, index=True)
     latitude = Column(Float)
-    longitude = Column(Float)    
+    longitude = Column(Float)   
+
+from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean
+from database import Base
+import datetime
+
+class Ticket(Base):
+    __tablename__ = "tickets"
+
+    id = Column(Integer, primary_key=True, index=True)
+    ticket_id = Column(String(50), unique=True, index=True)
+    user_email = Column(String(100))
+    route_no = Column(String(20))
+    source = Column(String(100))
+    destination = Column(String(100))
+    fare = Column(Float)
+    status = Column(String(30), default="PAID") # PAID, CHECKED_IN, COMPLETED
+    booked_at = Column(DateTime, default=datetime.datetime.utcnow)
+    entry_time = Column(DateTime, nullable=True)
+    exit_time = Column(DateTime, nullable=True) 
